@@ -1,8 +1,8 @@
 package me.byadolife.prisonbreak.listener;
 
-import me.byadolife.prisonbreak.listener.GameManager;
-import me.byadolife.prisonbreak.listener.GamePlayer;
-import me.byadolife.prisonbreak.listener.GameState;
+import me.byadolife.prisonbreak.manager.GameManager;
+import me.byadolife.prisonbreak.models.GamePlayer;
+import me.byadolife.prisonbreak.models.GameState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
