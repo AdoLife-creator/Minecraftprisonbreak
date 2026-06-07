@@ -1,6 +1,5 @@
 package me.byadolife.prisonbreak;
 
-import me.byadolife.prisonbreak.listener.PlayerListener;
 import me.byadolife.prisonbreak.manager.GameManager;
 import me.byadolife.prisonbreak.manager.LocationManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,17 +20,12 @@ public final class PrisonBreak extends JavaPlugin {
         locationManager = new LocationManager(this);
         gameManager = new GameManager(this, locationManager);
 
-        getServer().getPluginManager().registerEvents(
-                new PlayerListener(gameManager),
-                this
-        );
-
-        getLogger().info("PrisonBreak enabled (Paper 1.21.4)");
+        getLogger().info("PrisonBreak aktif!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("PrisonBreak disabled");
+        getLogger().info("PrisonBreak kapandı!");
     }
 
     public static PrisonBreak getInstance() {
