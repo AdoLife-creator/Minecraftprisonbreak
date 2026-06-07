@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class QuitListener implements Listener {
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        TabManager.reset(event.getPlayer());
+    public void onQuit(PlayerQuitEvent e) {
+        TabManager.clear(e.getPlayer());
     }
 }
