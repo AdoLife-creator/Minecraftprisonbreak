@@ -7,8 +7,6 @@ import me.byadolife.prisonbreak.listeners.TeamMenuListener;
 import me.byadolife.prisonbreak.managers.SpawnManager;
 import me.byadolife.prisonbreak.managers.TabManager;
 import me.byadolife.prisonbreak.managers.TeamManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PrisonBreak extends JavaPlugin {
@@ -21,32 +19,15 @@ public final class PrisonBreak extends JavaPlugin {
 
         saveDefaultConfig();
 
-        // 🔥 INIT SYSTEMS
-        SpawnManager.init(this);
         TeamManager.setup();
-        TabManager.setup();
+        TabManager.setupBoard();
+        SpawnManager.init(this);
 
-        // 🔥 ONLINE PLAYERS FIX (reload safe)
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            TabManager.setupPlayer(p);
-        }
-
-        // COMMANDS
         getCommand("pb").setExecutor(new PBCommand());
 
-        // LISTENERS
         getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
-
-        getLogger().info("PrisonBreak enabled!");
-    }
-
-    @Override
-    public void onDisable() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            TabManager.clear(p);
-        }
     }
 
     public static PrisonBreak getInstance() {
