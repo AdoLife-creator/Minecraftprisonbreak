@@ -1,8 +1,8 @@
-package dev.prisonbreak.commands;
+package me.byadolife.prisonbreak;
 
-import dev.prisonbreak.managers.GameManager;
-import dev.prisonbreak.models.GamePlayer;
-import dev.prisonbreak.models.GameState;
+import me.byadolife.prisonbreak.managers.GameManager;
+import me.byadolife.prisonbreak.models.GamePlayer;
+import me.byadolife.prisonbreak.models.GameState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
