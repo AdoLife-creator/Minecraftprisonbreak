@@ -5,17 +5,13 @@ import org.bukkit.entity.Player;
 
 public class SkinManager {
 
-    public static void setPrisonerSkin(Player player) {
-        Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(),
-                "skin set " + player.getName() + " yoshio0302"
-        );
+    public static void setPrisonerSkin(Player p) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                "skin set yoshio0302 " + p.getName());
     }
 
-    public static void setGuardSkin(Player player) {
-        Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(),
-                "skin set " + player.getName() + " Clinkoo"
-        );
+    public static void setGuardSkin(Player p) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                "skin set Clinkoo " + p.getName());
     }
 }
