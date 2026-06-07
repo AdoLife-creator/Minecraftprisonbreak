@@ -21,21 +21,18 @@ public final class PrisonBreak extends JavaPlugin {
 
         saveDefaultConfig();
 
-        // MANAGERS INIT
+        // 🔥 INIT SYSTEMS
         SpawnManager.init(this);
-
         TeamManager.setup();
-        TabManager.setupBoard();
+        TabManager.setup();
 
-        // ONLINE PLAYERS FIX (reload-safe)
+        // 🔥 ONLINE PLAYERS FIX (reload safe)
         for (Player p : Bukkit.getOnlinePlayers()) {
             TabManager.setupPlayer(p);
         }
 
         // COMMANDS
-        if (getCommand("pb") != null) {
-            getCommand("pb").setExecutor(new PBCommand());
-        }
+        getCommand("pb").setExecutor(new PBCommand());
 
         // LISTENERS
         getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
@@ -47,13 +44,9 @@ public final class PrisonBreak extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
-        // cleanup tab
         for (Player p : Bukkit.getOnlinePlayers()) {
             TabManager.clear(p);
         }
-
-        instance = null;
     }
 
     public static PrisonBreak getInstance() {
