@@ -3,7 +3,8 @@ package me.byadolife.prisonbreak.managers;
 import me.byadolife.prisonbreak.team.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class TabManager {
     private static Team prisoner;
     private static Team guard;
 
+    // 🔥 TEK INIT METODU
     public static void setup() {
         Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 
@@ -26,6 +28,16 @@ public class TabManager {
 
         prisoner.setPrefix("§6[M] §f");
         guard.setPrefix("§9[G] §f");
+    }
+
+    // 🔥 PLAYER JOIN RESET
+    public static void setupPlayer(Player player) {
+        if (player == null) return;
+
+        if (prisoner == null || guard == null) setup();
+
+        prisoner.removeEntry(player.getName());
+        guard.removeEntry(player.getName());
     }
 
     public static void setPrisoner(Player player) {
@@ -46,6 +58,7 @@ public class TabManager {
 
     public static void clear(Player player) {
         if (player == null) return;
+
         prisoner.removeEntry(player.getName());
         guard.removeEntry(player.getName());
         cache.remove(player.getUniqueId());
