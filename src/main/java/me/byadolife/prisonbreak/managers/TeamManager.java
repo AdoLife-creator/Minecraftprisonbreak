@@ -6,6 +6,8 @@ public static void setPrisoner(Player player) {
     cache.put(player.getUniqueId(), TeamType.PRISONER);
 
     player.teleport(SpawnManager.get("spawns.mahkum"));
+
+    SkinManager.setPrisonerSkin(player);
 }
 
 public static void setGuard(Player player) {
@@ -16,4 +18,6 @@ public static void setGuard(Player player) {
     cache.put(player.getUniqueId(), TeamType.GUARD);
 
     player.teleport(SpawnManager.get("spawns.gardiyan"));
+
+    SkinManager.setGuardSkin(player);
 }
