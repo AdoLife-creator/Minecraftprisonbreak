@@ -664,4 +664,7 @@ public class GameManager {
     public int getRemainingSeconds() { return remainingSeconds; }
     public boolean isInGame(Player p) { return players.containsKey(p.getUniqueId()); }
     public GamePlayer getGamePlayer(Player p) { return players.get(p.getUniqueId()); }
+
+    public LocationManager getLocationManager() {
+    return locationManager;
 }
