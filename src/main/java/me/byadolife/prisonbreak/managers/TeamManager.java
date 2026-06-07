@@ -1,65 +1,19 @@
-package me.byadolife.prisonbreak.managers;
+public static void setPrisoner(Player player) {
 
-import me.byadolife.prisonbreak.team.TeamType;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+    guard.removeEntry(player.getName());
+    prisoner.addEntry(player.getName());
 
-import java.util.HashMap;
-import java.util.UUID;
+    cache.put(player.getUniqueId(), TeamType.PRISONER);
 
-public class TeamManager {
+    player.teleport(SpawnManager.get("spawns.mahkum"));
+}
 
-    private static final HashMap<UUID, TeamType> teams = new HashMap<>();
+public static void setGuard(Player player) {
 
-    private static Team prisonerTeam;
-    private static Team guardTeam;
+    prisoner.removeEntry(player.getName());
+    guard.addEntry(player.getName());
 
-    public static void setup() {
-        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    cache.put(player.getUniqueId(), TeamType.GUARD);
 
-        prisonerTeam = board.getTeam("pb_prisoner");
-        if (prisonerTeam == null)
-            prisonerTeam = board.registerNewTeam("pb_prisoner");
-
-        guardTeam = board.getTeam("pb_guard");
-        if (guardTeam == null)
-            guardTeam = board.registerNewTeam("pb_guard");
-
-        prisonerTeam.setPrefix("§6[M] §f");
-        guardTeam.setPrefix("§9[G] §f");
-    }
-
-    public static void setPrisoner(Player player) {
-
-        guardTeam.removeEntry(player.getName());
-        prisonerTeam.addEntry(player.getName());
-
-        teams.put(player.getUniqueId(), TeamType.PRISONER);
-
-        SkinManager.setPrisonerSkin(player);
-
-        TabManager.setPrisoner(player);
-
-        player.sendMessage("§6Mahkum takımına katıldın!");
-    }
-
-    public static void setGuard(Player player) {
-
-        prisonerTeam.removeEntry(player.getName());
-        guardTeam.addEntry(player.getName());
-
-        teams.put(player.getUniqueId(), TeamType.GUARD);
-
-        SkinManager.setGuardSkin(player);
-
-        TabManager.setGuard(player);
-
-        player.sendMessage("§9Gardiyan takımına katıldın!");
-    }
-
-    public static TeamType getTeam(Player player) {
-        return teams.get(player.getUniqueId());
-    }
+    player.teleport(SpawnManager.get("spawns.gardiyan"));
 }
