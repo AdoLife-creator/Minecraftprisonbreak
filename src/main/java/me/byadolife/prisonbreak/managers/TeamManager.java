@@ -3,7 +3,8 @@ package me.byadolife.prisonbreak.managers;
 import me.byadolife.prisonbreak.team.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -21,11 +22,11 @@ public class TeamManager {
                 Bukkit.getScoreboardManager().getMainScoreboard();
 
         prisonerTeam = board.getTeam("pb_prisoner");
-        if(prisonerTeam == null)
+        if (prisonerTeam == null)
             prisonerTeam = board.registerNewTeam("pb_prisoner");
 
         guardTeam = board.getTeam("pb_guard");
-        if(guardTeam == null)
+        if (guardTeam == null)
             guardTeam = board.registerNewTeam("pb_guard");
 
         prisonerTeam.setPrefix("§6[M] §f");
@@ -52,5 +53,17 @@ public class TeamManager {
         teams.put(player.getUniqueId(), TeamType.GUARD);
 
         player.sendMessage("§9Gardiyan takımına katıldın!");
+    }
+
+    public static void clearPlayer(Player player) {
+
+        prisonerTeam.removeEntry(player.getName());
+        guardTeam.removeEntry(player.getName());
+
+        teams.remove(player.getUniqueId());
+    }
+
+    public static TeamType getTeam(Player player) {
+        return teams.get(player.getUniqueId());
     }
 }
