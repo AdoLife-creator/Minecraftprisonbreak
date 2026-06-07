@@ -2,52 +2,40 @@ package me.byadolife.prisonbreak.commands;
 
 import me.byadolife.prisonbreak.gui.TeamMenu;
 import me.byadolife.prisonbreak.managers.SpawnManager;
+import me.byadolife.prisonbreak.managers.TeamManager;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PBCommand implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(CommandSender sender,
-                             Command command,
-                             String label,
-                             String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player player))
-            return true;
+        if (!(sender instanceof Player player)) return true;
 
-        if(args.length == 1 &&
-                args[0].equalsIgnoreCase("join")) {
-
+        // /pb join
+        if (args.length == 1 && args[0].equalsIgnoreCase("join")) {
             TeamMenu.open(player);
             return true;
         }
 
-        if(args.length == 2 &&
-                args[0].equalsIgnoreCase("setspawn")) {
+        // /pb setspawn mahkum
+        if (args.length == 2 && args[0].equalsIgnoreCase("setspawn")) {
 
-            if(!player.hasPermission("prisonbreak.admin")) {
-                player.sendMessage("§cYetkin yok.");
+            if (!player.hasPermission("prisonbreak.admin")) {
+                player.sendMessage("§cYetkin yok!");
                 return true;
             }
 
-            SpawnManager.save(
-                    player.getLocation(),
-                    "spawns." + args[1].toLowerCase()
-            );
-
-            player.sendMessage(
-                    "§aSpawn kaydedildi: §e" + args[1]
-            );
-
+            SpawnManager.save(player.getLocation(), "spawns." + args[1].toLowerCase());
+            player.sendMessage("§aSpawn kaydedildi: §e" + args[1]);
             return true;
         }
 
+        player.sendMessage("§6PrisonBreak Komutları:");
         player.sendMessage("§e/pb join");
-        player.sendMessage("§e/pb setspawn lobby");
         player.sendMessage("§e/pb setspawn mahkum");
         player.sendMessage("§e/pb setspawn gardiyan");
 
@@ -55,26 +43,16 @@ public class PBCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender,
-                                      Command command,
-                                      String alias,
-                                      String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-        List<String> list = new ArrayList<>();
-
-        if(args.length == 1) {
-            list.add("join");
-            list.add("setspawn");
+        if (args.length == 1) {
+            return List.of("join", "setspawn");
         }
 
-        if(args.length == 2 &&
-                args[0].equalsIgnoreCase("setspawn")) {
-
-            list.add("lobby");
-            list.add("mahkum");
-            list.add("gardiyan");
+        if (args.length == 2 && args[0].equalsIgnoreCase("setspawn")) {
+            return List.of("mahkum", "gardiyan", "lobby");
         }
 
-        return list;
+        return List.of();
     }
 }
