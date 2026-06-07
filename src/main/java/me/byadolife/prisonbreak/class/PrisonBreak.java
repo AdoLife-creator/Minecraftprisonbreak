@@ -4,9 +4,9 @@ import me.byadolife.prisonbreak.commands.PBCommand;
 import me.byadolife.prisonbreak.listeners.JoinListener;
 import me.byadolife.prisonbreak.listeners.QuitListener;
 import me.byadolife.prisonbreak.listeners.TeamMenuListener;
-import me.byadolife.prisonbreak.managers.SpawnManager;
 import me.byadolife.prisonbreak.managers.TabManager;
 import me.byadolife.prisonbreak.managers.TeamManager;
+import me.byadolife.prisonbreak.managers.SpawnManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PrisonBreak extends JavaPlugin {
@@ -21,13 +21,12 @@ public final class PrisonBreak extends JavaPlugin {
 
         TeamManager.setup();
         TabManager.setupBoard();
-        SpawnManager.init(this);
 
         getCommand("pb").setExecutor(new PBCommand());
 
-        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
+        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
     }
 
     public static PrisonBreak getInstance() {
