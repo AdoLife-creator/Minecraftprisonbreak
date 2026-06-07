@@ -1,4 +1,4 @@
-package dev.prisonbreak.listeners;
+package me.byadolife.prisonbreak.listener;
 
 import dev.prisonbreak.managers.GameManager;
 import dev.prisonbreak.models.GamePlayer;
