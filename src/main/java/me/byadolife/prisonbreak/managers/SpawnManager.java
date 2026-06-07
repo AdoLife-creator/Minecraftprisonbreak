@@ -7,16 +7,9 @@ import org.bukkit.World;
 
 public class SpawnManager {
 
-    private static PrisonBreak plugin;
-
-    public static void init(PrisonBreak pl) {
-        plugin = pl;
-    }
-
     public static void save(Location loc, String path) {
-        if (plugin == null || loc == null) return;
 
-        var cfg = plugin.getConfig();
+        var cfg = PrisonBreak.getInstance().getConfig();
 
         cfg.set(path + ".world", loc.getWorld().getName());
         cfg.set(path + ".x", loc.getX());
@@ -25,13 +18,12 @@ public class SpawnManager {
         cfg.set(path + ".yaw", loc.getYaw());
         cfg.set(path + ".pitch", loc.getPitch());
 
-        plugin.saveConfig();
+        PrisonBreak.getInstance().saveConfig();
     }
 
     public static Location get(String path) {
-        if (plugin == null) return null;
 
-        var cfg = plugin.getConfig();
+        var cfg = PrisonBreak.getInstance().getConfig();
 
         if (!cfg.contains(path + ".world")) return null;
 
