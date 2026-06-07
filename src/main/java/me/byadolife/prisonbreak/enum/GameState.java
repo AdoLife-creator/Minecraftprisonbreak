@@ -1,4 +1,4 @@
-package dev.prisonbreak.models;
+package me.byadolife.prisonbreak.models;
 
 public enum GameState {
     WAITING,      // Oyuncu bekleniyor
