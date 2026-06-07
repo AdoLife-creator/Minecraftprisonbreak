@@ -17,9 +17,7 @@ public class TeamManager {
     private static Team guardTeam;
 
     public static void setup() {
-
-        Scoreboard board =
-                Bukkit.getScoreboardManager().getMainScoreboard();
+        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 
         prisonerTeam = board.getTeam("pb_prisoner");
         if (prisonerTeam == null)
@@ -36,10 +34,13 @@ public class TeamManager {
     public static void setPrisoner(Player player) {
 
         guardTeam.removeEntry(player.getName());
-
         prisonerTeam.addEntry(player.getName());
 
         teams.put(player.getUniqueId(), TeamType.PRISONER);
+
+        SkinManager.setPrisonerSkin(player);
+
+        TabManager.setPrisoner(player);
 
         player.sendMessage("§6Mahkum takımına katıldın!");
     }
@@ -47,20 +48,15 @@ public class TeamManager {
     public static void setGuard(Player player) {
 
         prisonerTeam.removeEntry(player.getName());
-
         guardTeam.addEntry(player.getName());
 
         teams.put(player.getUniqueId(), TeamType.GUARD);
 
+        SkinManager.setGuardSkin(player);
+
+        TabManager.setGuard(player);
+
         player.sendMessage("§9Gardiyan takımına katıldın!");
-    }
-
-    public static void clearPlayer(Player player) {
-
-        prisonerTeam.removeEntry(player.getName());
-        guardTeam.removeEntry(player.getName());
-
-        teams.remove(player.getUniqueId());
     }
 
     public static TeamType getTeam(Player player) {
