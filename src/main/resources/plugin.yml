@@ -1,6 +1,6 @@
 name: PrisonBreak
 version: '${project.version}'
-main: dev.prisonbreak.PrisonBreak
+main: me.byadolife.prisonbreak.PrisonBreak
 api-version: '1.21'
 description: Roblox Jailbreak inspired minigame
 authors: [ PrisonBreak ]
