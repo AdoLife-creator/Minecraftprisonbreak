@@ -9,7 +9,6 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        TabManager.setup();
-        TabManager.clear(e.getPlayer());
+        TabManager.setupPlayer(e.getPlayer());
     }
 }
