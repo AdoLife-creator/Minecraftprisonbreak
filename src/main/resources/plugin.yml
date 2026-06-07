@@ -1,26 +1,8 @@
 name: PrisonBreak
-version: 1.0.1
+version: 1.0
 main: me.byadolife.prisonbreak.PrisonBreak
 api-version: '1.21'
-description: Roblox Jailbreak inspired minigame
-authors: [PrisonBreak]
 
 commands:
   pb:
-    description: Main PrisonBreak command
-    usage: /pb <join|leave|setspawn|setescape|setarrest|setcell|setup|start|stop|status>
-    permission: prisonbreak.use
-
-  pbadmin:
-    description: PrisonBreak admin commands
-    usage: /pbadmin <setspawn|setescape|setarrest|setcell|setup>
-    permission: prisonbreak.admin
-
-permissions:
-  prisonbreak.use:
-    description: Allows using PrisonBreak commands
-    default: true
-
-  prisonbreak.admin:
-    description: Allows using PrisonBreak admin commands
-    default: op
+    description: PrisonBreak command
