@@ -1,15 +1,14 @@
 package me.byadolife.prisonbreak;
 
-import me.byadolife.prisonbreak.manager.GameManager;
-import me.byadolife.prisonbreak.manager.LocationManager;
+import me.byadolife.prisonbreak.commands.PBCommand;
+import me.byadolife.prisonbreak.listeners.JoinListener;
+import me.byadolife.prisonbreak.listeners.TeamMenuListener;
+import me.byadolife.prisonbreak.managers.TeamManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PrisonBreak extends JavaPlugin {
 
     private static PrisonBreak instance;
-
-    private GameManager gameManager;
-    private LocationManager locationManager;
 
     @Override
     public void onEnable() {
@@ -17,24 +16,18 @@ public final class PrisonBreak extends JavaPlugin {
 
         saveDefaultConfig();
 
-        locationManager = new LocationManager(this);
-        gameManager = new GameManager(this, locationManager);
+        TeamManager.setup();
 
-        getLogger().info("PrisonBreak aktif!");
-    }
+        getCommand("pb").setExecutor(new PBCommand());
 
-    @Override
-    public void onDisable() {
-        getLogger().info("PrisonBreak kapandı!");
+        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     public static PrisonBreak getInstance() {
         return instance;
     }
-
-    public GameManager getGameManager() {
-        return gameManager;
-    }
+}    }
 
     public LocationManager getLocationManager() {
         return locationManager;
