@@ -1,4 +1,4 @@
-package me.byadolife.prisonbreak.managers;
+package me.byadolife.prisonbreak.manager;
 
 import me.byadolife.prisonbreak.PrisonBreak;
 import org.bukkit.Location;
