@@ -1,7 +1,6 @@
 package me.byadolife.prisonbreak;
 
 import me.byadolife.prisonbreak.commands.PBCommand;
-import me.byadolife.prisonbreak.commands.PBTabCompleter;
 import me.byadolife.prisonbreak.listeners.JoinListener;
 import me.byadolife.prisonbreak.listeners.TeamMenuListener;
 import me.byadolife.prisonbreak.managers.TeamManager;
@@ -19,20 +18,27 @@ public final class PrisonBreak extends JavaPlugin {
 
         TeamManager.setup();
 
-        if (getCommand("pb") != null) {
-            getCommand("pb").setExecutor(new PBCommand());
-            getCommand("pb").setTabCompleter(new PBTabCompleter());
-        }
+        PBCommand pbCommand = new PBCommand();
 
-        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getCommand("pb").setExecutor(pbCommand);
+        getCommand("pb").setTabCompleter(pbCommand);
 
-        getLogger().info("PrisonBreak aktif edildi!");
+        getServer().getPluginManager().registerEvents(
+                new TeamMenuListener(),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new JoinListener(),
+                this
+        );
+
+        getLogger().info("PrisonBreak enabled.");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("PrisonBreak devre disi birakildi!");
+        getLogger().info("PrisonBreak disabled.");
     }
 
     public static PrisonBreak getInstance() {
