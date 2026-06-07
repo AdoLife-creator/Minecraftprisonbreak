@@ -1,67 +1,62 @@
-package me.byadolife.prisonbreak.managers;
+package me.byadolife.prisonbreak;
 
-import me.byadolife.prisonbreak.team.TeamType;
+import me.byadolife.prisonbreak.commands.PBCommand;
+import me.byadolife.prisonbreak.listeners.JoinListener;
+import me.byadolife.prisonbreak.listeners.QuitListener;
+import me.byadolife.prisonbreak.listeners.TeamMenuListener;
+import me.byadolife.prisonbreak.managers.SpawnManager;
+import me.byadolife.prisonbreak.managers.TabManager;
+import me.byadolife.prisonbreak.managers.TeamManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.UUID;
+public final class PrisonBreak extends JavaPlugin {
 
-public class TabManager {
+    private static PrisonBreak instance;
 
-    private static final HashMap<UUID, TeamType> cache = new HashMap<>();
+    @Override
+    public void onEnable() {
+        instance = this;
 
-    private static Team prisoner;
-    private static Team guard;
+        saveDefaultConfig();
 
-    public static void setupBoard() {
-        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+        // MANAGERS INIT
+        SpawnManager.init(this);
 
-        prisoner = board.getTeam("pb_prisoner");
-        if (prisoner == null) prisoner = board.registerNewTeam("pb_prisoner");
+        TeamManager.setup();
+        TabManager.setupBoard();
 
-        guard = board.getTeam("pb_guard");
-        if (guard == null) guard = board.registerNewTeam("pb_guard");
+        // ONLINE PLAYERS FIX (reload-safe)
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            TabManager.setupPlayer(p);
+        }
 
-        prisoner.setPrefix("§6[M] §f");
-        guard.setPrefix("§9[G] §f");
+        // COMMANDS
+        if (getCommand("pb") != null) {
+            getCommand("pb").setExecutor(new PBCommand());
+        }
+
+        // LISTENERS
+        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(), this);
+
+        getLogger().info("PrisonBreak enabled!");
     }
 
-    // oyuncu girince çağır
-    public static void setupPlayer(Player player) {
-        if (player == null) return;
+    @Override
+    public void onDisable() {
 
-        if (prisoner == null || guard == null) setupBoard();
+        // cleanup tab
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            TabManager.clear(p);
+        }
 
-        // default temizle
-        prisoner.removeEntry(player.getName());
-        guard.removeEntry(player.getName());
+        instance = null;
     }
 
-    public static void setPrisoner(Player player) {
-        guard.removeEntry(player.getName());
-        prisoner.addEntry(player.getName());
-
-        cache.put(player.getUniqueId(), TeamType.PRISONER);
-    }
-
-    public static void setGuard(Player player) {
-        prisoner.removeEntry(player.getName());
-        guard.addEntry(player.getName());
-
-        cache.put(player.getUniqueId(), TeamType.GUARD);
-    }
-
-    public static TeamType getTeam(Player player) {
-        return cache.get(player.getUniqueId());
-    }
-
-    public static void clear(Player player) {
-        if (player == null) return;
-
-        prisoner.removeEntry(player.getName());
-        guard.removeEntry(player.getName());
-        cache.remove(player.getUniqueId());
+    public static PrisonBreak getInstance() {
+        return instance;
     }
 }
