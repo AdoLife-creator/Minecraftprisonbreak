@@ -1,4 +1,4 @@
-package dev.prisonbreak.models;
+package me.byadolife.prisonbreak.models;
 
 import org.bukkit.ChatColor;
 
