@@ -1,7 +1,8 @@
 package me.byadolife.prisonbreak.listeners;
 
 import me.byadolife.prisonbreak.managers.TabManager;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
