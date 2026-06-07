@@ -1,6 +1,6 @@
-package dev.prisonbreak.managers;
+package me.byadolife.prisonbreak.managers;
 
-import dev.prisonbreak.PrisonBreak;
+import me.byadolife.prisonbreak.PrisonBreak;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
