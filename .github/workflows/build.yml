@@ -2,6 +2,12 @@ name: Build PrisonBreak
 
 on:
   push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+
   workflow_dispatch:
 
 jobs:
@@ -9,28 +15,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Repository indir
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Java 21 kur
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-          cache: maven
+          cache: gradle
 
-      - name: Build Plugin
-        run: mvn clean package
+      - name: Gradle izin ver
+        run: chmod +x gradlew
 
-      - name: Create ZIP
-        run: |
-          mkdir release
-          cp target/*.jar release/
-          cd release
-          zip -r PrisonBreak.zip .
+      - name: Plugin derle
+        run: ./gradlew build
 
-      - name: Upload ZIP
+      - name: Jar yükle
         uses: actions/upload-artifact@v4
         with:
           name: PrisonBreak
-          path: release/PrisonBreak.zip
+          path: build/libs/*.jar
