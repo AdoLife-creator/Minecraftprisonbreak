@@ -1,9 +1,9 @@
-package dev.prisonbreak.managers;
+package me.byadolife.prisonbreak;
 
-import dev.prisonbreak.PrisonBreak;
-import dev.prisonbreak.models.GamePlayer;
-import dev.prisonbreak.models.GameRole;
-import dev.prisonbreak.models.GameState;
+import me.byadolife.prisonbreak.PrisonBreak;
+import me.byadolife.prisonbreak.models.GamePlayer;
+import me.byadolife.prisonbreak.models.GameRole;
+import me.byadolife.prisonbreak.models.GameState;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
