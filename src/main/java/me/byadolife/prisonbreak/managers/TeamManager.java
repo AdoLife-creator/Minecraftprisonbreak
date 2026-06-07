@@ -3,7 +3,7 @@ package me.byadolife.prisonbreak.managers;
 import me.byadolife.prisonbreak.team.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -16,7 +16,7 @@ public class TeamManager {
     private static Team guard;
 
     public static void setup() {
-        Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+        var board = Bukkit.getScoreboardManager().getMainScoreboard();
 
         prisoner = board.getTeam("pb_prisoner");
         if (prisoner == null) prisoner = board.registerNewTeam("pb_prisoner");
@@ -28,27 +28,31 @@ public class TeamManager {
         guard.setPrefix("§9[G] §f");
     }
 
-    public static void setPrisoner(Player player) {
-        guard.removeEntry(player.getName());
-        prisoner.addEntry(player.getName());
-        cache.put(player.getUniqueId(), TeamType.PRISONER);
+    public static void setPrisoner(Player p) {
+        guard.removeEntry(p.getName());
+        prisoner.addEntry(p.getName());
+
+        cache.put(p.getUniqueId(), TeamType.PRISONER);
+
+        p.sendMessage("§aMahkum takımına katıldın!");
+
+        SkinManager.setPrisonerSkin(p);
+        p.teleport(SpawnManager.get("spawns.mahkum"));
     }
 
-    public static void setGuard(Player player) {
-        prisoner.removeEntry(player.getName());
-        guard.addEntry(player.getName());
-        cache.put(player.getUniqueId(), TeamType.GUARD);
+    public static void setGuard(Player p) {
+        prisoner.removeEntry(p.getName());
+        guard.addEntry(p.getName());
+
+        cache.put(p.getUniqueId(), TeamType.GUARD);
+
+        p.sendMessage("§9Gardiyan takımına katıldın!");
+
+        SkinManager.setGuardSkin(p);
+        p.teleport(SpawnManager.get("spawns.gardiyan"));
     }
 
-    public static TeamType getTeam(Player player) {
-        return cache.get(player.getUniqueId());
-    }
-
-    public static void clear(Player player) {
-        if (player == null) return;
-
-        prisoner.removeEntry(player.getName());
-        guard.removeEntry(player.getName());
-        cache.remove(player.getUniqueId());
+    public static TeamType getTeam(Player p) {
+        return cache.get(p.getUniqueId());
     }
 }
