@@ -1,4 +1,4 @@
-package me.byadolife.prisonbreak;
+package me.byadolife.prisonbreak.manager;
 
 import me.byadolife.prisonbreak.PrisonBreak;
 import me.byadolife.prisonbreak.models.GamePlayer;
