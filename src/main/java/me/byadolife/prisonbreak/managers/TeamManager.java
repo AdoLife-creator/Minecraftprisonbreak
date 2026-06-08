@@ -1,5 +1,6 @@
 package me.byadolife.prisonbreak.managers;
 
+import me.byadolife.prisonbreak.PrisonBreak;
 import me.byadolife.prisonbreak.team.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,6 +13,8 @@ public class TeamManager {
     private static final HashMap<UUID, TeamType> teams = new HashMap<>();
     private static final HashMap<UUID, Integer> guardKills = new HashMap<>();
     private static final HashMap<UUID, Boolean> criminals = new HashMap<>();
+
+    // ================= TEAM =================
 
     public static boolean hasTeam(Player p) {
         return teams.containsKey(p.getUniqueId());
@@ -29,39 +32,15 @@ public class TeamManager {
         return getTeam(p) == TeamType.GUARD;
     }
 
-    public static void setPrisoner(Player p) {
+    // ================= REMOVE (FIXED) =================
 
-        if (hasTeam(p)) return;
-
-        teams.put(p.getUniqueId(), TeamType.PRISONER);
-
-        p.performCommand("skin set yoshio0302 " + p.getName());
-
-        p.setPlayerListName("§6[M] §f" + p.getName());
-
-        Location loc = SpawnManager.get("mahkum");
-        if (loc != null) p.teleport(loc);
-
-        p.sendMessage("§6Mahkum oldun!");
+    public static void remove(Player p) {
+        teams.remove(p.getUniqueId());
+        guardKills.remove(p.getUniqueId());
+        criminals.remove(p.getUniqueId());
     }
 
-    public static void setGuard(Player p) {
-
-        if (hasTeam(p)) return;
-
-        teams.put(p.getUniqueId(), TeamType.GUARD);
-
-        p.performCommand("skin set Clinkoo " + p.getName());
-
-        GuardKitManager.giveKit(p);
-
-        p.setPlayerListName("§9[G] §f" + p.getName());
-
-        Location loc = SpawnManager.get("gardiyan");
-        if (loc != null) p.teleport(loc);
-
-        p.sendMessage("§9Gardiyan oldun!");
-    }
+    // ================= CRIMINAL FIX =================
 
     public static void markCriminal(Player p) {
         criminals.put(p.getUniqueId(), true);
@@ -71,28 +50,27 @@ public class TeamManager {
         return criminals.getOrDefault(p.getUniqueId(), false);
     }
 
-    public static void addIllegalKill(Player g) {
-
-        int c = guardKills.getOrDefault(g.getUniqueId(), 0) + 1;
-        guardKills.put(g.getUniqueId(), c);
-
-        if (c >= 3) {
-            guardKills.remove(g.getUniqueId());
-            setPrisoner(g);
-        }
+    public static void clearCriminal(Player p) {
+        criminals.remove(p.getUniqueId());
     }
 
-    public static void respawn(Player p) {
+    // ================= SPAWN FIX =================
 
-        Location loc = isPrisoner(p)
-                ? SpawnManager.get("mahkum")
-                : SpawnManager.get("gardiyan");
+    public static Location getSpawn(String key) {
 
-        if (loc != null) {
-            Bukkit.getScheduler().runTask(
-                    me.byadolife.prisonbreak.PrisonBreak.getInstance(),
-                    () -> p.teleport(loc)
-            );
-        }
+        var cfg = PrisonBreak.getInstance().getConfig();
+
+        String path = "teams." + key + ".spawn";
+
+        if (!cfg.contains(path + ".world")) return null;
+
+        return new Location(
+                Bukkit.getWorld(cfg.getString(path + ".world")),
+                cfg.getDouble(path + ".x"),
+                cfg.getDouble(path + ".y"),
+                cfg.getDouble(path + ".z"),
+                (float) cfg.getDouble(path + ".yaw"),
+                (float) cfg.getDouble(path + ".pitch")
+        );
     }
 }
