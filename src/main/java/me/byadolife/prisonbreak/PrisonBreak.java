@@ -1,14 +1,11 @@
 package me.byadolife.prisonbreak;
 
 import me.byadolife.prisonbreak.commands.PBCommand;
-import me.byadolife.prisonbreak.listeners.DeathListener;
-import me.byadolife.prisonbreak.listeners.GuardItemListener;
-import me.byadolife.prisonbreak.listeners.JoinListener;
-import me.byadolife.prisonbreak.listeners.QuitListener;
-import me.byadolife.prisonbreak.listeners.TeamMenuListener;
+import me.byadolife.prisonbreak.listeners.*;
+import me.byadolife.prisonbreak.managers.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class PrisonBreak extends JavaPlugin {
+public class PrisonBreak extends JavaPlugin {
 
     private static PrisonBreak instance;
 
@@ -19,23 +16,14 @@ public final class PrisonBreak extends JavaPlugin {
 
         saveDefaultConfig();
 
-        PBCommand command = new PBCommand();
-
-        getCommand("pb").setExecutor(command);
-        getCommand("pb").setTabCompleter(command);
+        getCommand("pb").setExecutor(new PBCommand());
 
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
-        getServer().getPluginManager().registerEvents(new TeamMenuListener(), this);
+        getServer().getPluginManager().registerEvents(new DamageListener(), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
-        getServer().getPluginManager().registerEvents(new GuardItemListener(), this);
 
-        getLogger().info("PrisonBreak aktif!");
-    }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("PrisonBreak kapatildi!");
+        TabManager.setup();
     }
 
     public static PrisonBreak getInstance() {
