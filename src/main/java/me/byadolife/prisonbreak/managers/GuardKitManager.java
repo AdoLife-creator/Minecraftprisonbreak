@@ -3,6 +3,7 @@ package me.byadolife.prisonbreak.managers;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class GuardKitManager {
 
@@ -10,17 +11,23 @@ public class GuardKitManager {
 
         player.getInventory().clear();
 
-        ItemStack sword =
-                new ItemStack(Material.WOODEN_SWORD);
+        ItemStack baton = new ItemStack(Material.WOODEN_SWORD);
+        ItemMeta batonMeta = baton.getItemMeta();
+        batonMeta.setDisplayName("§6Gardiyan Copu");
+        baton.setItemMeta(batonMeta);
 
-        ItemStack cuffs =
-                new ItemStack(Material.FISHING_ROD);
+        ItemStack taser = new ItemStack(Material.BLAZE_ROD);
+        ItemMeta taserMeta = taser.getItemMeta();
+        taserMeta.setDisplayName("§eŞok Tabancası");
+        taser.setItemMeta(taserMeta);
 
-        ItemStack stun =
-                new ItemStack(Material.BLAZE_ROD);
+        ItemStack cuffs = new ItemStack(Material.LEAD);
+        ItemMeta cuffsMeta = cuffs.getItemMeta();
+        cuffsMeta.setDisplayName("§bKelepçe");
+        cuffs.setItemMeta(cuffsMeta);
 
-        player.getInventory().addItem(sword);
-        player.getInventory().addItem(cuffs);
-        player.getInventory().addItem(stun);
+        player.getInventory().setItem(0, baton);
+        player.getInventory().setItem(1, taser);
+        player.getInventory().setItem(2, cuffs);
     }
 }
