@@ -1,15 +1,16 @@
 package me.byadolife.prisonbreak.managers;
 
+import me.byadolife.prisonbreak.PrisonBreak;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class SpawnManager {
 
-    public static Location get(String key) {
+    public static Location getSpawn(String team) {
 
         var cfg = PrisonBreak.getInstance().getConfig();
 
-        String path = "teams." + key + ".spawn";
+        String path = "teams." + team + ".spawn";
 
         if (!cfg.contains(path + ".world")) return null;
 
