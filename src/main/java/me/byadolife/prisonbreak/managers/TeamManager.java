@@ -1,11 +1,11 @@
 package me.byadolife.prisonbreak.managers;
 
 import me.byadolife.prisonbreak.team.TeamType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class TeamManager {
 
@@ -13,124 +13,86 @@ public class TeamManager {
     private static final HashMap<UUID, Integer> guardKills = new HashMap<>();
     private static final HashMap<UUID, Boolean> criminals = new HashMap<>();
 
-    public static TeamType getTeam(Player player) {
-        return teams.get(player.getUniqueId());
+    public static boolean hasTeam(Player p) {
+        return teams.containsKey(p.getUniqueId());
     }
 
-    public static boolean isPrisoner(Player player) {
-        return getTeam(player) == TeamType.PRISONER;
+    public static TeamType getTeam(Player p) {
+        return teams.get(p.getUniqueId());
     }
 
-    public static boolean isGuard(Player player) {
-        return getTeam(player) == TeamType.GUARD;
+    public static boolean isPrisoner(Player p) {
+        return getTeam(p) == TeamType.PRISONER;
     }
 
-    public static void remove(Player player) {
-
-        teams.remove(player.getUniqueId());
-        guardKills.remove(player.getUniqueId());
-        criminals.remove(player.getUniqueId());
+    public static boolean isGuard(Player p) {
+        return getTeam(p) == TeamType.GUARD;
     }
 
-    public static void setPrisoner(Player player) {
+    public static void setPrisoner(Player p) {
 
-        if (isPrisoner(player)) {
-            player.sendMessage("§cZaten mahkumsun.");
-            return;
+        if (hasTeam(p)) return;
+
+        teams.put(p.getUniqueId(), TeamType.PRISONER);
+
+        p.performCommand("skin set yoshio0302 " + p.getName());
+
+        p.setPlayerListName("§6[M] §f" + p.getName());
+
+        Location loc = SpawnManager.get("mahkum");
+        if (loc != null) p.teleport(loc);
+
+        p.sendMessage("§6Mahkum oldun!");
+    }
+
+    public static void setGuard(Player p) {
+
+        if (hasTeam(p)) return;
+
+        teams.put(p.getUniqueId(), TeamType.GUARD);
+
+        p.performCommand("skin set Clinkoo " + p.getName());
+
+        GuardKitManager.giveKit(p);
+
+        p.setPlayerListName("§9[G] §f" + p.getName());
+
+        Location loc = SpawnManager.get("gardiyan");
+        if (loc != null) p.teleport(loc);
+
+        p.sendMessage("§9Gardiyan oldun!");
+    }
+
+    public static void markCriminal(Player p) {
+        criminals.put(p.getUniqueId(), true);
+    }
+
+    public static boolean isCriminal(Player p) {
+        return criminals.getOrDefault(p.getUniqueId(), false);
+    }
+
+    public static void addIllegalKill(Player g) {
+
+        int c = guardKills.getOrDefault(g.getUniqueId(), 0) + 1;
+        guardKills.put(g.getUniqueId(), c);
+
+        if (c >= 3) {
+            guardKills.remove(g.getUniqueId());
+            setPrisoner(g);
         }
-
-        teams.put(player.getUniqueId(), TeamType.PRISONER);
-
-        SkinManager.setPrisonerSkin(player);
-
-        Location spawn = SpawnManager.getSpawn("mahkum");
-
-        if (spawn != null) {
-            player.teleport(spawn);
-        }
-
-        player.sendMessage("§6Mahkum takımına katıldın!");
     }
 
-    public static void setGuard(Player player) {
+    public static void respawn(Player p) {
 
-        if (isGuard(player)) {
-            player.sendMessage("§cZaten gardiyansın.");
-            return;
-        }
+        Location loc = isPrisoner(p)
+                ? SpawnManager.get("mahkum")
+                : SpawnManager.get("gardiyan");
 
-        teams.put(player.getUniqueId(), TeamType.GUARD);
-
-        SkinManager.setGuardSkin(player);
-
-        GuardKitManager.giveKit(player);
-
-        Location spawn = SpawnManager.getSpawn("gardiyan");
-
-        if (spawn != null) {
-            player.teleport(spawn);
-        }
-
-        player.sendMessage("§9Gardiyan takımına katıldın!");
-    }
-
-    public static void markCriminal(Player player) {
-
-        criminals.put(
-                player.getUniqueId(),
-                true
-        );
-
-        player.sendMessage(
-                "§cBir gardiyana saldırdın, artık aranıyorsun!"
-        );
-    }
-
-    public static boolean isCriminal(Player player) {
-
-        return criminals.getOrDefault(
-                player.getUniqueId(),
-                false
-        );
-    }
-
-    public static void clearCriminal(Player player) {
-
-        criminals.remove(
-                player.getUniqueId()
-        );
-    }
-
-    public static void addIllegalKill(Player guard) {
-
-        int amount =
-                guardKills.getOrDefault(
-                        guard.getUniqueId(),
-                        0
-                ) + 1;
-
-        guardKills.put(
-                guard.getUniqueId(),
-                amount
-        );
-
-        guard.sendMessage(
-                "§cMasum mahkum öldürdün! (" +
-                        amount +
-                        "/3)"
-        );
-
-        if (amount >= 3) {
-
-            guardKills.remove(
-                    guard.getUniqueId()
+        if (loc != null) {
+            Bukkit.getScheduler().runTask(
+                    me.byadolife.prisonbreak.PrisonBreak.getInstance(),
+                    () -> p.teleport(loc)
             );
-
-            guard.sendMessage(
-                    "§4Masum mahkumları öldürdüğün için mahkum oldun!"
-            );
-
-            setPrisoner(guard);
         }
     }
 }
