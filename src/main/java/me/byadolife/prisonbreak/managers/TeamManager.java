@@ -11,6 +11,11 @@ public class TeamManager {
 
     private static final HashMap<UUID, TeamType> teams = new HashMap<>();
     private static final HashMap<UUID, Integer> guardKills = new HashMap<>();
+    private static final HashMap<UUID, Boolean> criminals = new HashMap<>();
+
+    public static TeamType getTeam(Player player) {
+        return teams.get(player.getUniqueId());
+    }
 
     public static boolean isPrisoner(Player player) {
         return getTeam(player) == TeamType.PRISONER;
@@ -20,13 +25,11 @@ public class TeamManager {
         return getTeam(player) == TeamType.GUARD;
     }
 
-    public static TeamType getTeam(Player player) {
-        return teams.get(player.getUniqueId());
-    }
-
     public static void remove(Player player) {
+
         teams.remove(player.getUniqueId());
         guardKills.remove(player.getUniqueId());
+        criminals.remove(player.getUniqueId());
     }
 
     public static void setPrisoner(Player player) {
@@ -40,11 +43,11 @@ public class TeamManager {
 
         SkinManager.setPrisonerSkin(player);
 
-        Location spawn =
-                SpawnManager.getSpawn("mahkum");
+        Location spawn = SpawnManager.getSpawn("mahkum");
 
-        if (spawn != null)
+        if (spawn != null) {
             player.teleport(spawn);
+        }
 
         player.sendMessage("§6Mahkum takımına katıldın!");
     }
@@ -62,13 +65,40 @@ public class TeamManager {
 
         GuardKitManager.giveKit(player);
 
-        Location spawn =
-                SpawnManager.getSpawn("gardiyan");
+        Location spawn = SpawnManager.getSpawn("gardiyan");
 
-        if (spawn != null)
+        if (spawn != null) {
             player.teleport(spawn);
+        }
 
         player.sendMessage("§9Gardiyan takımına katıldın!");
+    }
+
+    public static void markCriminal(Player player) {
+
+        criminals.put(
+                player.getUniqueId(),
+                true
+        );
+
+        player.sendMessage(
+                "§cBir gardiyana saldırdın, artık aranıyorsun!"
+        );
+    }
+
+    public static boolean isCriminal(Player player) {
+
+        return criminals.getOrDefault(
+                player.getUniqueId(),
+                false
+        );
+    }
+
+    public static void clearCriminal(Player player) {
+
+        criminals.remove(
+                player.getUniqueId()
+        );
     }
 
     public static void addIllegalKill(Player guard) {
@@ -97,7 +127,7 @@ public class TeamManager {
             );
 
             guard.sendMessage(
-                    "§4Çok fazla masum öldürdüğün için mahkum oldun!"
+                    "§4Masum mahkumları öldürdüğün için mahkum oldun!"
             );
 
             setPrisoner(guard);
